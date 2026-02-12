@@ -1,3 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.SurveyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+
+    <style name="CalcButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+    <style name="CalcOpButton" parent="CalcButton">
+        <item name="android:backgroundTint">#FF9800</item> <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="CalcClearButton" parent="CalcButton">
+        <item name="android:backgroundTint">#D32F2F</item> <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="CalcEqButton" parent="CalcButton">
+        <item name="android:backgroundTint">#4CAF50</item> <item name="android:textColor">#FFFFFF</item>
+    </style>
 </resources>

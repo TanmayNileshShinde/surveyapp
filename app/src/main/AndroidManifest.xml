@@ -24,6 +24,8 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".SurveyActivity" />
         <activity android:name=".SurveyListActivity" />
+        <service android:name=".AppStatusService" />
+        <activity android:name=".CalculatorActivity" />
 
     </application>
 
