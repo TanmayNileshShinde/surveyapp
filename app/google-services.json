@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "31725684248",
+    "project_id": "surveyapp-f1065",
+    "storage_bucket": "surveyapp-f1065.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31725684248:android:0c62dccde3d7731830256d",
+        "android_client_info": {
+          "package_name": "com.example.surveyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClNugsE6gtfCYl-nDVemZf2oRNCed9p90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

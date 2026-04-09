@@ -3,103 +3,92 @@ package com.example.surveyapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etUser, etPass;
-    Button btnLogin, btnRegisterLink;
-    ToggleButton toggle;
-    SharedPreferences prefs;
-
-    // 5 hardcoded users
-    String[] hardUsers = {"admin", "user1", "user2", "user3", "user4"};
-    String[] hardPasswords = {"1234", "pass1", "pass2", "pass3", "pass4"};
+    private EditText etEmail, etPassword;
+    private Button btnLogin;
+    private TextView tvRegister;
+    private MaterialCheckBox cbRememberMe; // Added Checkbox variable
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etUser = findViewById(R.id.etUser);
-        etPass = findViewById(R.id.etPass);
+        mAuth = FirebaseAuth.getInstance();
+
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        toggle = findViewById(R.id.toggleBtn);
-        btnRegisterLink = findViewById(R.id.btnRegisterLink); // optional "Register" button
+        tvRegister = findViewById(R.id.tvRegister);
+        cbRememberMe = findViewById(R.id.cbRememberMe); // Linked the Checkbox
 
-        prefs = getSharedPreferences("SurveyPrefs", MODE_PRIVATE);
+        // --- REMEMBER ME: Check Memory on Startup ---
+        SharedPreferences prefs = getSharedPreferences("SurveyPrefs", MODE_PRIVATE);
+        boolean isRemembered = prefs.getBoolean("rememberMe", false);
 
-        // AUTO LOGIN if remembered
-        if (prefs.getBoolean("isLoggedIn", false)) {
-            startActivity(new Intent(this, SurveyListActivity.class));
-            finish();
+        if (isRemembered) {
+            // Auto-fill the boxes if they checked it last time
+            etEmail.setText(prefs.getString("savedEmail", ""));
+            etPassword.setText(prefs.getString("savedPassword", ""));
+            cbRememberMe.setChecked(true);
         }
 
-        btnLogin.setOnClickListener(v -> {
-            String user = etUser.getText().toString().trim();
-            String pass = etPass.getText().toString().trim();
+        btnLogin.setOnClickListener(v -> loginUser());
 
-            boolean valid = false;
-
-            // 1️⃣ Check hardcoded users
-            for (int i = 0; i < hardUsers.length; i++) {
-                if (user.equals(hardUsers[i]) && pass.equals(hardPasswords[i])) {
-                    valid = true;
-                    break;
-                }
-            }
-
-            // 2️⃣ Check registered users in SharedPreferences
-            if (!valid) {
-                String storedPass = prefs.getString("user_" + user, null);
-                if (storedPass != null && storedPass.equals(pass)) {
-                    valid = true;
-                }
-            }
-
-            if (valid) {
-                if (toggle.isChecked()) {
-                    prefs.edit().putBoolean("isLoggedIn", true).apply();
-                }
-                showCustomToast("Login Successful", true);
-                startActivity(new Intent(this, SurveyListActivity.class));
-                finish();
-            } else {
-                showCustomToast("Invalid Login", false);
-            }
+        tvRegister.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
-
-        // Optional: go to registration screen
-        btnRegisterLink.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-        });
-
     }
 
-    // Custom toast function
-    private void showCustomToast(String message, boolean success) {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.toast_custom, findViewById(R.id.toastRoot));
+    private void loginUser() {
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
 
-        ImageView icon = layout.findViewById(R.id.toastIcon);
-        TextView text = layout.findViewById(R.id.toastText);
-
-        text.setText(message);
-
-        if (success) {
-            icon.setImageResource(R.drawable.like);
-            layout.setBackgroundResource(R.drawable.toast_success_bg);
-        } else {
-            icon.setImageResource(R.drawable.dislike);
-            layout.setBackgroundResource(R.drawable.toast_fail_bg);
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        Toast toast = new Toast(this);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-        toast.show();
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        // --- REMEMBER ME: Save Memory on Success ---
+                        SharedPreferences.Editor editor = getSharedPreferences("SurveyPrefs", MODE_PRIVATE).edit();
+
+                        if (cbRememberMe.isChecked()) {
+                            // Save the credentials
+                            editor.putBoolean("rememberMe", true);
+                            editor.putString("savedEmail", email);
+                            editor.putString("savedPassword", password);
+                        } else {
+                            // Wipe the credentials if they unchecked it
+                            editor.putBoolean("rememberMe", false);
+                            editor.putString("savedEmail", "");
+                            editor.putString("savedPassword", "");
+                        }
+
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.apply();
+
+                        // Jump to the main dashboard
+                        startActivity(new Intent(LoginActivity.this, SurveyListActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

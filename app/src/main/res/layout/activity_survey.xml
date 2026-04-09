@@ -1,151 +1,391 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F8F7FA"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
 
-        <!-- ===== NEW : Countdown Timer ===== -->
-        <TextView
-            android:id="@+id/txtTimer"
-            android:text="Time Left: 60s"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <!-- ===== NEW : Date Picker ===== -->
-        <Button
-            android:id="@+id/btnDate"
-            android:text="Select Survey Date"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/txtDate"
-            android:text="No date selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <!-- ===== NEW : Time Picker ===== -->
-        <Button
-            android:id="@+id/btnTime"
-            android:text="Select Survey Time"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/txtTime"
-            android:text="No time selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <!-- ===== OLD CONTENT (UNCHANGED) ===== -->
-
-        <TextView
-            android:text="Survey"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/q1"
-            android:text="Question 1"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/r1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RadioButton
-                android:id="@+id/r2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <RadioButton
-                android:id="@+id/r3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/q2"
-            android:text="Question 2"
-            android:layout_marginTop="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <CheckBox
-            android:id="@+id/cb1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <CheckBox
-            android:id="@+id/cb2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <CheckBox
-            android:id="@+id/cb3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/q3"
-            android:text="Dropdown Question"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Spinner
-            android:id="@+id/subjectSpinner"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="28dp">
 
-        <ImageButton
-            android:id="@+id/btnReset"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_reset"
-            android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:padding="10dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="Reset"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Survey"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:letterSpacing="-0.02"
+                android:textColor="#1E1B4B" />
 
-        <Button
-            android:id="@+id/btnSubmit"
-            android:text="Submit Survey"
-            android:layout_marginTop="20dp"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#EDE9FE"
+                app:cardCornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:cardElevation="0dp">
+                <TextView
+                    android:id="@+id/txtTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:text="60s"
+                    android:textColor="#7C3AED"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <ViewFlipper
+            android:id="@+id/surveyFlipper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            android:indeterminate="true"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Step 1 of 4 • Schedule"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#8B5CF6"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#DDD6FE"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDate"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Select Date"
+                            android:textColor="#4F46E5"
+                            app:strokeColor="#C7D2FE"
+                            app:iconTint="#4F46E5"
+                            app:icon="@android:drawable/ic_menu_my_calendar"
+                            app:cornerRadius="12dp" />
+
+                        <TextView
+                            android:id="@+id/txtDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No date selected"
+                            android:textAlignment="center"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="16dp"
+                            android:textSize="14sp"
+                            android:textColor="#6B7280"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTime"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Select Time"
+                            android:textColor="#4F46E5"
+                            app:strokeColor="#C7D2FE"
+                            app:iconTint="#4F46E5"
+                            app:icon="@android:drawable/ic_menu_recent_history"
+                            app:cornerRadius="12dp" />
+
+                        <TextView
+                            android:id="@+id/txtTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No time selected"
+                            android:textAlignment="center"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="12dp"
+                            android:textSize="14sp"
+                            android:textColor="#6B7280"/>
+
+                        <ImageButton
+                            android:id="@+id/btnReset1"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end"
+                            android:src="@android:drawable/ic_menu_revert"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Reset"
+                            app:tint="#A78BFA" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNext1"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Next Step"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#4F46E5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Step 2 of 4 • First Question"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#8B5CF6"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#DDD6FE"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/q1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Question 1"
+                            android:textStyle="bold"
+                            android:textColor="#1E1B4B"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="12dp"/>
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp">
+                            <RadioButton android:id="@+id/r1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Option 1" />
+                            <RadioButton android:id="@+id/r2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Option 2" />
+                            <RadioButton android:id="@+id/r3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Option 3" />
+                        </RadioGroup>
+
+                        <ImageButton
+                            android:id="@+id/btnReset2"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end"
+                            android:src="@android:drawable/ic_menu_revert"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Reset"
+                            app:tint="#A78BFA" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNext2"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Next Step"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#4F46E5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Step 3 of 4 • Multiple Choices"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#8B5CF6"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#DDD6FE"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/q2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Question 2"
+                            android:textStyle="bold"
+                            android:textColor="#1E1B4B"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="12dp"/>
+
+                        <CheckBox android:id="@+id/cb1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Choice A"/>
+                        <CheckBox android:id="@+id/cb2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Choice B"/>
+                        <CheckBox android:id="@+id/cb3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#4B5563" android:text="Choice C"
+                            android:layout_marginBottom="8dp"/>
+
+                        <ImageButton
+                            android:id="@+id/btnReset3"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end"
+                            android:src="@android:drawable/ic_menu_revert"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Reset"
+                            app:tint="#A78BFA" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNext3"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Next Step"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#4F46E5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Step 4 of 4 • Final Details"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#8B5CF6"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#DDD6FE"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/q3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Dropdown Question"
+                            android:textStyle="bold"
+                            android:textColor="#1E1B4B"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="12dp"/>
+
+                        <Spinner
+                            android:id="@+id/subjectSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginBottom="12dp"
+                            android:backgroundTint="#8B5CF6" />
+
+                        <ImageButton
+                            android:id="@+id/btnReset4"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end"
+                            android:src="@android:drawable/ic_menu_revert"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Reset"
+                            app:tint="#A78BFA" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Complete Survey"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#D4AF37" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    android:progressTint="#D4AF37"
+                    android:progressDrawable="@android:drawable/progress_horizontal"
+                    android:indeterminate="true" />
+
+            </LinearLayout>
+
+        </ViewFlipper>
     </LinearLayout>
 </ScrollView>

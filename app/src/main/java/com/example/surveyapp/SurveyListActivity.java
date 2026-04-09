@@ -1,63 +1,107 @@
 package com.example.surveyapp;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.IntentFilter;
+import android.hardware.camera2.CameraManager;
+import android.media.AudioManager;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SurveyListActivity extends AppCompatActivity {
 
-    SharedPreferences prefs;
-    GridView surveyGridView;
-    // Items for the GridView (Requirement 11)
-    String[] tools = {"Calculator", "Official Website"};
+    private BottomNavigationView bottomNavigationView;
+    private ModeReceiver modeReceiver = new ModeReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey_list);
 
-        prefs = getSharedPreferences("SurveyPrefs", MODE_PRIVATE);
-
-        // --- 1. EXISTING BUTTON LOGIC ---
-        findViewById(R.id.btn1).setOnClickListener(v -> openSurvey("Student Survey"));
-        findViewById(R.id.btn2).setOnClickListener(v -> openSurvey("College Survey"));
-        findViewById(R.id.btn3).setOnClickListener(v -> openSurvey("App Feedback Survey"));
-
-        // --- 2. NEW GRIDVIEW LOGIC (Req 11 & 12 & 19) ---
-        surveyGridView = findViewById(R.id.surveyGridView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tools);
-        surveyGridView.setAdapter(adapter);
-
-        surveyGridView.setOnItemClickListener((parent, view, position, id) -> {
-            if (position == 0) {
-                // Clicked "Calculator" -> Open Calculator Activity (Req 12)
-                startActivity(new Intent(this, CalculatorActivity.class));
-            } else if (position == 1) {
-                // Clicked "Official Website" -> Implicit Intent (Req 19)
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nexus-fun.vercel.app/"));
-                startActivity(intent);
-            }
-        });
-
-        // --- 3. LOGOUT LOGIC ---
-        findViewById(R.id.btnLogout).setOnClickListener(v -> {
-            prefs.edit().clear().apply();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
-
-        // --- 4. START SERVICE (Req 20) ---
+        // Start your custom App Status Service
         startService(new Intent(this, AppStatusService.class));
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Register Broadcast Receiver for Airplane & Silent Modes
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        registerReceiver(modeReceiver, filter);
+
+        // Setup the bottom navigation clicks
+        setupNavigation();
+
+        // Fix: Load the Home screen by default when the app first opens
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+        }
     }
 
-    void openSurvey(String title) {
-        Intent i = new Intent(this, SurveyActivity.class);
-        i.putExtra("title", title);
-        startActivity(i);
+    private void setupNavigation() {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int id = item.getItemId(); // Get the ID
+
+            if (id == R.id.nav_home) {
+                selectedFragment = new HomeFragment();
+            } else if (id == R.id.nav_leaderboard) {
+                selectedFragment = new LeaderboardFragment(); // THE NEW ROUTE
+            } else if (id == R.id.nav_profile) {
+                selectedFragment = new ProfileFragment();
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment)
+                        .commit();
+            }
+            return true;
+        });
     }
+
+    // I kept your flashlight toggle safe just in case you are calling it from somewhere else!
+    private void toggleFlashlight() {
+        try {
+            CameraManager camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+            if (camManager != null) {
+                String cameraId = camManager.getCameraIdList()[0];
+                camManager.setTorchMode(cameraId, true);
+                Toast.makeText(this, R.string.flashlight_on, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Flashlight Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_custom, findViewById(R.id.toastRoot));
+
+        TextView text = layout.findViewById(R.id.toastText);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(modeReceiver); // Prevents memory leaks
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

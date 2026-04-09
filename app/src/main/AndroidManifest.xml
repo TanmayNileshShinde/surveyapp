@@ -2,29 +2,55 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.surveyapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
     <application
         android:allowBackup="true"
-        android:icon="@drawable/app_icon"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="SurveyApp"
         android:theme="@style/Theme.SurveyApp">
 
-        <!-- Splash Screen (NEW LAUNCHER) -->
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Existing Activities (UNCHANGED) -->
+        <activity android:name=".SmsActivity" />
+        <activity android:name=".EmailActivity" />
+
+        <receiver android:name=".SmsReceiver" android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".SurveyActivity" />
+        <activity android:name=".SurveyCompletedActivity" />
+        <activity android:name=".MyContactsActivity" />
         <activity android:name=".SurveyListActivity" />
         <service android:name=".AppStatusService" />
+        <activity android:name=".TorchActivity" />
         <activity android:name=".CalculatorActivity" />
 
     </application>
