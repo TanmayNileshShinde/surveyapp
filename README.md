@@ -1,5 +1,10 @@
 # 📋 Survey App
 
+[![GitHub stars](https://img.shields.io/github/stars/TanmayNileshShinde/surveyapp.svg?style=flat&color=yellow)](https://github.com/TanmayNileshShinde/surveyapp/stargazers)
+![Android](https://img.shields.io/badge/Platform-Android-green?logo=android)
+![Java](https://img.shields.io/badge/Language-Java-orange?logo=openjdk)
+![Firebase](https://img.shields.io/badge/Backend-Firebase-yellow?logo=firebase)
+
 > A native Android application designed to gather and analyze insights across gaming, academics, and tech.
 
 ## 📖 About The Project
