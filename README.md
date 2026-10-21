@@ -33,7 +33,7 @@ This project is a comprehensive mobile survey platform built natively for Androi
 **Tanmay**
 
 
-- LinkedIn: https://www.linkedin.com/in/tanmay-shinde-9b07753bb
+- LinkedIn: https://www.linkedin.com/in/tanmaynileshshinde
 
 - GitHub: https://github.com/TanmayNileshShinde/surveyapp
 
